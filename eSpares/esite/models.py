@@ -23,6 +23,7 @@ class Product(models.Model):
         db_table = 'product'
 
 
+
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -42,3 +43,15 @@ class Cart(models.Model):
 
     class Meta:
         db_table = 'cart'
+
+
+
+class   Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    rating = models.PositiveIntegerField()
+    comment = models.TextField()
+    review_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'review'

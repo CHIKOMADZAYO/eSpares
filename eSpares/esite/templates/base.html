@@ -1,34 +1,122 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Spares Website</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'native_css/styles.css' %}">
 </head>
+
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">E-Spares</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'home' %}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'products' %}">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'cart' %}">Cart</a>
-                    </li>
-                </ul>
-            </div>
+
+    <!-- TOP NAVIGATION -->
+    <nav class="top-nav">
+
+        <div class="logo">Upsteps</div>
+
+        <div class="top-links">
+            <a href="#">Laptops</a>
+            <a href="#">Desktops</a>
+            <a href="#">Smartphones</a>
+            <a href="#">Accessories</a>
+            <a href="#">Subscriptions</a>
+            <a href="#">Support</a>
+            <a href="#" class="business-btn">Solutions for Business</a>
+        </div>
+
+        <div class="nav-icons">
+
+            <!-- Search -->
+            <svg viewBox="0 0 24 24">
+                <circle cx="10.5" cy="10.5" r="7.5" />
+                <path d="M16 16 L22 22" />
+            </svg>
+
+            <!-- Shopping Cart -->
+            <svg viewBox="0 0 24 24">
+                <path d="M2 3h2l3 13h12l3-9H5" />
+                <circle cx="9" cy="20" r="1" />
+                <circle cx="18" cy="20" r="1" />
+            </svg>
+
+            <!-- Account -->
+            <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+                <circle cx="12" cy="9" r="3" />
+                <path d="M6.5 19c1-3 3-4.5 5.5-4.5s4.5 1.5 5.5 4.5" />
+            </svg>
+
         </div>
     </nav>
+
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav">
+
+        <a href="#" class="active">Support Home</a>
+
+        <details class="nav-dropdown">
+            <summary>
+                Products
+                <span class="dropdown" aria-hidden="true"></span>
+            </summary>
+            <div class="nav-dropdown-menu">
+                <a href="#">Smartphone Parts Store</a>
+                <a href="#">PC Parts Store</a>
+                <a href="#">Laptops Parts Store</a>
+                <a href="#">All Repairs</a>
+            </div>
+        </details>
+
+        <a href="{% url 'drivers' %}">Software and Drivers</a>
+
+        <details class="nav-dropdown">
+            <summary>
+                Diagnostics
+                <span class="dropdown" aria-hidden="true"></span>
+            </summary>
+            <div class="nav-dropdown-menu">
+                <a href="#">Phone Diagnostic Tool</a>
+                <a href="#">Computer Diagnostic Tool</a>
+                <a href="#">Windows Support</a>
+                <a href="#">PC Hardware Diagnostics</a>
+            </div>
+        </details>
+
+        <a href="#">Contact Us</a>
+
+        <details class="nav-dropdown">
+            <summary>
+                Business Support
+                <span class="dropdown" aria-hidden="true"></span>
+            </summary>
+            <div class="nav-dropdown-menu">
+                <a href="#">Create New Case</a>
+                <a href="#">Find existing Case</a>
+                <a href="#">Manage Warranties</a>
+                <a href="#">Register Account</a>
+                <a href="#">MySupport Help</a>
+            </div>
+        </details>
+
+       <details class="nav-dropdown">
+            <summary>
+                My Upsteps Account
+                <span class="dropdown" aria-hidden="true"></span>
+            </summary>
+            <div class="nav-dropdown-menu">
+                <a href="#">Support Dashboard</a>
+                <a href="#">Upsteps Benefits</a>
+                
+            </div>
+        </details>
+
+    </nav>
+
 
     <!-- Main Content -->
     <main class="container mt-4">
@@ -45,4 +133,5 @@
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 </body>
+
 </html>

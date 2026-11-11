@@ -25,3 +25,6 @@ class ProductForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
     price = forms.DecimalField(max_digits=10, decimal_places=2)
     image = forms.ImageField()
+
+
+

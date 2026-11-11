@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block content %}
+     <!-- STEP NAVIGATION -->
+    <nav class="step-navigation">
+
+        <div class="step active">
+            <div class="step-number">1</div>
+            <span>Identify</span>
+        </div>
+
+        <span class="step-arrow">›</span>
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <span>Download</span>
+        </div>
+
+        <span class="step-arrow">›</span>
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <span>Install</span>
+        </div>
+
+    </nav>
+
+
+    <!-- ACCOUNT BANNER -->
+    <div class="account-banner">
+        Already have an HP account? Select from the products you own.
+        <a href="#">Sign in</a>
+        /
+        <a href="#">Create an account</a>
+    </div>
+
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+        <h1>Welcome to HP Software and Drivers</h1>
+
+        <h2>Select your product type below</h2>
+
+
+        <!-- PRODUCT SELECTION CARDS -->
+        <section class="product-container">
+
+            <!-- PRINTER -->
+            <a href="#" class="product-card">
+
+                <svg viewBox="0 0 48 48">
+                    <rect x="13" y="5" width="22" height="10" rx="2"/>
+                    <path d="M13 11H10a4 4 0 0 0-4 4v13h7"/>
+                    <path d="M35 11h3a4 4 0 0 1 4 4v13h-7"/>
+                    <rect x="13" y="25" width="22" height="17" rx="2"/>
+                    <path d="M18 30h12M18 35h12"/>
+                    <path d="M10 20h3"/>
+                </svg>
+
+                <span>Printer</span>
+
+            </a>
+
+
+            <!-- LAPTOP -->
+            <a href="#" class="product-card">
+
+                <svg viewBox="0 0 48 48">
+                    <rect x="8" y="10" width="32" height="25" rx="2"/>
+                    <path d="M5 39h38"/>
+                </svg>
+
+                <span>Laptop</span>
+
+            </a>
+
+
+            <!-- DESKTOP -->
+            <a href="#" class="product-card">
+
+                <svg viewBox="0 0 48 48">
+                    <rect x="5" y="8" width="33" height="27" rx="2"/>
+                    <path d="M21 35v5M13 40h17"/>
+                    <rect x="31" y="22" width="12" height="19" rx="2"/>
+                    <path d="M35 37h4"/>
+                </svg>
+
+                <span>Desktop</span>
+
+            </a>
+
+
+            <!-- POLY -->
+            <a href="#" class="product-card">
+
+                <svg viewBox="0 0 48 48">
+                    <path d="M12 27v-9a12 12 0 0 1 24 0v9"/>
+                    <path d="M12 20a7 7 0 0 0 0 14h3V21h-3z"/>
+                    <path d="M36 20a7 7 0 0 1 0 14h-3V21h3z"/>
+                    <path d="M33 35c-2 5-6 6-11 6"/>
+                    <circle cx="21" cy="41" r="2"/>
+                </svg>
+
+                <span>Poly</span>
+
+            </a>
+
+
+            <!-- OTHER -->
+            <a href="#" class="product-card">
+
+                <svg viewBox="0 0 48 48">
+                    <rect x="5" y="8" width="34" height="24" rx="3"/>
+                    <path d="M10 37h24"/>
+                    <rect x="32" y="17" width="11" height="21" rx="3"/>
+                    <path d="M36 34h3"/>
+                </svg>
+
+                <span>Other</span>
+
+            </a>
+
+        </section>
+
+        <div class="bottom-line"></div>
+
+{% endblock %}

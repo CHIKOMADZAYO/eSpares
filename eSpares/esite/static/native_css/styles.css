@@ -1,0 +1,378 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* TOP NAVIGATION */
+.top-nav {
+    height: 61px;
+    background: #ffffff;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    gap: 30px;
+}
+
+.logo {
+    width: 34px;
+    height: 34px;
+    background: #0866d9;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 10px;
+    font-weight: bold;
+    /* font-style: italic; */
+    margin-right: 10px;
+}
+
+.top-links {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    flex: 1;
+}
+
+.top-links a {
+    text-decoration: none;
+    color: #222;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.business-btn {
+    border: 1px solid #0066e5;
+    border-radius: 9px;
+    padding: 8px 16px;
+    color: #0066e5 !important;
+}
+
+.nav-icons {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.nav-icons svg {
+    width: 21px;
+    height: 21px;
+    stroke: #111;
+    stroke-width: 1.5;
+    fill: none;
+    cursor: pointer;
+}
+
+/* BOTTOM NAVIGATION */
+.bottom-nav {
+    height: 41px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    padding: 0 15px;
+}
+
+.bottom-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    white-space: nowrap;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.bottom-nav a.active {
+    border-bottom: 3px solid #fff;
+}
+
+.dropdown {
+    width: 10px;
+    height: 10px;
+    border-right: 1.5px solid white;
+    border-bottom: 1.5px solid white;
+    transform: rotate(45deg);
+    margin-top: -5px;
+}
+
+.nav-dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+.nav-dropdown summary {
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    height: 100%;
+    list-style: none;
+    white-space: nowrap;
+}
+
+.nav-dropdown summary::-webkit-details-marker {
+    display: none;
+}
+
+.nav-dropdown[open] summary .dropdown {
+    transform: rotate(225deg);
+    margin-top: 5px;
+}
+
+.nav-dropdown-menu {
+    background: #fff;
+    border: 1px solid #e3e3e3;
+    border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    min-width: 230px;
+    padding: 8px 0;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+}
+
+.nav-dropdown-menu a {
+    color: #222;
+    display: block;
+    font-size: 14px;
+    height: auto;
+    padding: 11px 16px;
+    text-decoration: none;
+}
+
+.nav-dropdown-menu a:hover,
+.nav-dropdown-menu a:focus-visible {
+    background: #f2f6fa;
+    color: #0866d9;
+    outline: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .top-nav {
+        gap: 15px;
+    }
+
+    .top-links {
+        gap: 15px;
+    }
+
+    .top-links a {
+        font-size: 12px;
+    }
+
+    .bottom-nav {
+        justify-content: flex-start;
+        overflow-x: auto;
+        gap: 22px;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .top-links a:not(:first-child),
+    .business-btn {
+        display: none;
+    }
+
+    .top-nav {
+        justify-content: space-between;
+    }
+
+    .bottom-nav {
+        justify-content: flex-start;
+    }
+}
+
+
+/* STEP NAVIGATION */
+.step-navigation {
+    height: 68px;
+    display: flex;
+    align-items: center;
+    padding: 0 17px;
+    gap: 17px;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 16px;
+    color: #777;
+}
+
+.step.active {
+    color: #111;
+}
+
+.step-number {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #888;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+}
+
+.step.active .step-number {
+    background: #222;
+    color: white;
+    border-color: #222;
+    font-weight: bold;
+}
+
+.step-arrow {
+    color: #777;
+    font-size: 23px;
+    font-weight: 300;
+}
+
+/* ACCOUNT NOTIFICATION */
+.account-banner {
+    height: 56px;
+    background: #f0f7fa;
+    display: flex;
+    align-items: center;
+    padding: 0 17px;
+    font-size: 16px;
+}
+
+.account-banner a {
+    color: #0070c9;
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.account-banner a:hover {
+    text-decoration: underline;
+}
+
+/* MAIN CONTENT */
+.main-content {
+    padding: 32px 17px;
+}
+
+.main-content h1 {
+    color: #00843d;
+    font-size: 23px;
+    font-weight: 400;
+    margin-bottom: 13px;
+}
+
+.main-content h2 {
+    font-size: 23px;
+    font-weight: 400;
+    margin-bottom: 32px;
+}
+
+/* PRODUCT CARDS */
+.product-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 30px;
+}
+
+.product-card {
+    height: 176px;
+    background: #fff;
+    border-radius: 17px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.10);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+    cursor: pointer;
+    transition: 0.25s ease;
+    text-decoration: none;
+    color: #111;
+}
+
+.product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.product-card svg {
+    width: 42px;
+    height: 42px;
+    stroke: #0084bd;
+    stroke-width: 1.8;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.product-card span {
+    font-size: 16px;
+}
+
+/* BOTTOM LINE */
+.bottom-line {
+    margin: 50px 11px 0;
+    border-top: 1px solid #d5d5d5;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 900px) {
+    .product-container {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .step-navigation {
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .step {
+        gap: 6px;
+        font-size: 13px;
+    }
+
+    .account-banner {
+        height: auto;
+        min-height: 56px;
+        padding: 12px;
+        flex-wrap: wrap;
+        font-size: 13px;
+    }
+
+    .main-content {
+        padding: 28px 15px;
+    }
+
+    .main-content h1,
+    .main-content h2 {
+        font-size: 20px;
+    }
+
+    .product-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .product-card {
+        height: 150px;
+    }
+}
