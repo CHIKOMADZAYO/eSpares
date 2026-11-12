@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<nav class="product-breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'product_list' %}">Parts</a>
+    <span aria-hidden="true">/</span>
+    <span>{{ product.name }}</span>
+</nav>
+<article class="product-detail">
+    <div class="product-detail-image">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <span aria-hidden="true" class="catalog-image-placeholder">E-Spares</span>
+        {% endif %}
+    </div>
+    <div class="product-detail-info">
+        <p class="catalog-eyebrow">Spare part</p>
+        <h1>{{ product.name }}</h1>
+        <p class="product-detail-price">{{ product.price }}</p>
+        <h2>Description</h2>
+        <p class="product-description">{{ product.description|linebreaksbr }}</p>
+        <a class="product-back-link" href="{% url 'product_list' %}">← Back to parts</a>
+    </div>
+</article>
+{% endblock %}

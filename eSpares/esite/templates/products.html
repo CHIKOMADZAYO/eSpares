@@ -1,11 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="catalog-page" aria-labelledby="catalog-title">
+    <header class="catalog-heading">
+        <div>
+            <p class="catalog-eyebrow">E-Spares store</p>
+            <h1 id="catalog-title">Find parts for your device</h1>
+            <p>Search the catalog by product name or description.</p>
+        </div>
+        <form class="catalog-search" method="get" role="search">
+            <label class="visually-hidden" for="catalog-query">Search products</label>
+            <input id="catalog-query" type="search" name="q" value="{{ query }}" maxlength="100"
+                   placeholder="Search spare parts" autocomplete="off">
+            <button type="submit">Search</button>
+        </form>
+    </header>
+
+    {% if query %}
+        <p class="catalog-result-label">Results for “{{ query }}”</p>
+    {% endif %}
+
+    {% if page.object_list %}
+        <div class="catalog-grid">
+            {% for product in page.object_list %}
+                <article class="catalog-card">
+                    <a class="catalog-image" href="{% url 'product_detail' product.pk %}" aria-label="View {{ product.name }}">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" loading="lazy">
+                        {% else %}
+                            <span aria-hidden="true" class="catalog-image-placeholder">E-Spares</span>
+                        {% endif %}
+                    </a>
+                    <div class="catalog-card-body">
+                        <h2><a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a></h2>
+                        <p>{{ product.description|truncatewords:20 }}</p>
+                        <div class="catalog-card-footer">
+                            <strong>{{ product.price }}</strong>
+                            <a class="catalog-detail-link" href="{% url 'product_detail' product.pk %}">View details</a>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        {% if page.has_other_pages %}
+            <nav class="catalog-pagination" aria-label="Product pages">
+                {% if page.has_previous %}
+                    <a href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ page.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+                {% if page.has_next %}
+                    <a href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ page.next_page_number }}">Next</a>
+                {% endif %}
+            </nav>
+        {% endif %}
+    {% else %}
+        <div class="catalog-empty">
+            <h2>{% if query %}No matching parts found{% else %}The catalog is ready for products{% endif %}</h2>
+            <p>{% if query %}Try another product name or search term.{% else %}Products added to the store will appear here.{% endif %}</p>
+            {% if query %}<a href="{% url 'product_list' %}">Clear search</a>{% endif %}
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

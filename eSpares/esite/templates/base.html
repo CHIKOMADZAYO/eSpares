@@ -8,33 +8,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>E-Spares Website</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'native_css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'native_css/styles.css' %}?v=2">
 </head>
 
-<body>
+<body class="{% block body_class %}{% endblock %}">
 
     <!-- TOP NAVIGATION -->
     <nav class="top-nav">
 
-        <div class="logo">Upsteps</div>
+        <a class="logo" href="{% url 'home' %}">Upsteps</a>
 
         <div class="top-links">
-            <a href="#">Laptops</a>
-            <a href="#">Desktops</a>
-            <a href="#">Smartphones</a>
-            <a href="#">Accessories</a>
+            <a href="{% url 'product_list' %}">Shop parts</a>
             <a href="#">Subscriptions</a>
-            <a href="#">Support</a>
-            <a href="#" class="business-btn">Solutions for Business</a>
+            <a href="{% url 'diagnose' %}">Support</a>
+            <a href="{% url 'product_list' %}" class="business-btn">Browse parts</a>
         </div>
 
         <div class="nav-icons">
 
             <!-- Search -->
-            <svg viewBox="0 0 24 24">
+            <a href="{% url 'product_list' %}" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true">
                 <circle cx="10.5" cy="10.5" r="7.5" />
                 <path d="M16 16 L22 22" />
-            </svg>
+            </svg></a>
 
             <!-- Shopping Cart -->
             <svg viewBox="0 0 24 24">
@@ -57,7 +54,7 @@
     <!-- BOTTOM NAVIGATION -->
     <nav class="bottom-nav">
 
-        <a href="#" class="active">Support Home</a>
+        <a href="{% url 'home' %}" class="active">Support Home</a>
 
         <details class="nav-dropdown">
             <summary>
@@ -65,10 +62,7 @@
                 <span class="dropdown" aria-hidden="true"></span>
             </summary>
             <div class="nav-dropdown-menu">
-                <a href="#">Smartphone Parts Store</a>
-                <a href="#">PC Parts Store</a>
-                <a href="#">Laptops Parts Store</a>
-                <a href="#">All Repairs</a>
+                <a href="{% url 'product_list' %}">Browse all parts</a>
             </div>
         </details>
 

@@ -1,5 +1,7 @@
-from django.contrib.auth import authenticate, get_user_model, login, logout
-from django.shortcuts import redirect, render
+from django.contrib.auth import authenticate, login, logout
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import Product
 from .form import UserRegistrationForm,ProductForm, UserLoginForm
 
@@ -33,18 +35,9 @@ def login_view(request):
 def signup_view(request):
     form = UserRegistrationForm(request.POST or None)
     if request.method == 'POST' and form.is_valid():
-        user_model = get_user_model()
-        username = form.cleaned_data['username']
-        if user_model.objects.filter(username=username).exists():
-            form.add_error('username', 'A user with that username already exists.')
-        else:
-            user = user_model.objects.create_user(
-                username=username,
-                email=form.cleaned_data['email'],
-                password=form.cleaned_data['password1'],
-            )
-            login(request, user)
-            return redirect('home')
+        user = form.save()
+        login(request, user)
+        return redirect('home')
     return render(request, 'signup.html', {'form': form})
 
 
@@ -60,10 +53,17 @@ def create_product(request):
 
 
 def product_list(request):
-    pass  # Placeholder for product listing logic
+    query = request.GET.get('q', '').strip()[:100]
+    products = Product.objects.all().order_by('name', 'pk')
+    if query:
+        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+
+    page = Paginator(products, 12).get_page(request.GET.get('page'))
+    return render(request, 'products.html', {'page': page, 'query': query})
 
 def product_detail(request, product_id):
-    pass  # Placeholder for product detail logic
+    product = get_object_or_404(Product, pk=product_id)
+    return render(request, 'product_detail.html', {'product': product})
 
 def add_to_cart(request, product_id):
     pass  # Placeholder for add to cart logic
