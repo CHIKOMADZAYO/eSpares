@@ -27,7 +27,7 @@ def login_view(request):
         else:
             login_form.add_error(None, 'Invalid username or password.')
 
-    return render(request, 'login.html')
+    return render(request, 'login.html', {'form': login_form})
 
 
 def signup_view(request):
