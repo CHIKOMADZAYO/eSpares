@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import Product
+from .models import Brand, Product
 from .form import UserRegistrationForm,ProductForm, UserLoginForm
 
 
@@ -55,11 +55,24 @@ def create_product(request):
 def product_list(request):
     query = request.GET.get('q', '').strip()[:100]
     products = Product.objects.all().order_by('name', 'pk')
+    selected_brand = None
+    brand_id = request.GET.get('brand', '')
+    if brand_id.isdecimal() and len(brand_id) <= 19:
+        try:
+            selected_brand = Brand.objects.filter(pk=int(brand_id)).first()
+        except (OverflowError, ValueError):
+            selected_brand = None
+    if selected_brand:
+        products = products.filter(brand=selected_brand)
     if query:
         products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
 
     page = Paginator(products, 12).get_page(request.GET.get('page'))
-    return render(request, 'products.html', {'page': page, 'query': query})
+    return render(request, 'products.html', {
+        'page': page,
+        'query': query,
+        'selected_brand': selected_brand,
+    })
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)

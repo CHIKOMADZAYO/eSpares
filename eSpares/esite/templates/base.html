@@ -63,6 +63,9 @@
             </summary>
             <div class="nav-dropdown-menu">
                 <a href="{% url 'product_list' %}">Browse all parts</a>
+                {% for brand in product_brands %}
+                    <a href="{% url 'product_list' %}?brand={{ brand.pk }}">{{ brand.name }}</a>
+                {% endfor %}
             </div>
         </details>
 

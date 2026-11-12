@@ -15,7 +15,7 @@
         {% endif %}
     </div>
     <div class="product-detail-info">
-        <p class="catalog-eyebrow">Spare part</p>
+        <p class="catalog-eyebrow">{% if product.brand %}{{ product.brand.name }}{% else %}Spare part{% endif %}</p>
         <h1>{{ product.name }}</h1>
         <p class="product-detail-price">{{ product.price }}</p>
         <h2>Description</h2>

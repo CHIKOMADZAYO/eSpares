@@ -9,6 +9,7 @@
             <p>Search the catalog by product name or description.</p>
         </div>
         <form class="catalog-search" method="get" role="search">
+            {% if selected_brand %}<input type="hidden" name="brand" value="{{ selected_brand.pk }}">{% endif %}
             <label class="visually-hidden" for="catalog-query">Search products</label>
             <input id="catalog-query" type="search" name="q" value="{{ query }}" maxlength="100"
                    placeholder="Search spare parts" autocomplete="off">
@@ -18,6 +19,8 @@
 
     {% if query %}
         <p class="catalog-result-label">Results for “{{ query }}”</p>
+    {% elif selected_brand %}
+        <p class="catalog-result-label">Showing {{ selected_brand.name }} parts</p>
     {% endif %}
 
     {% if page.object_list %}
@@ -32,6 +35,7 @@
                         {% endif %}
                     </a>
                     <div class="catalog-card-body">
+                        {% if product.brand %}<p class="catalog-eyebrow">{{ product.brand.name }}</p>{% endif %}
                         <h2><a href="{% url 'product_detail' product.pk %}">{{ product.name }}</a></h2>
                         <p>{{ product.description|truncatewords:20 }}</p>
                         <div class="catalog-card-footer">
@@ -46,19 +50,19 @@
         {% if page.has_other_pages %}
             <nav class="catalog-pagination" aria-label="Product pages">
                 {% if page.has_previous %}
-                    <a href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ page.previous_page_number }}">Previous</a>
+                    <a href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}{% if selected_brand %}brand={{ selected_brand.pk }}&amp;{% endif %}page={{ page.previous_page_number }}">Previous</a>
                 {% endif %}
                 <span>Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
                 {% if page.has_next %}
-                    <a href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}page={{ page.next_page_number }}">Next</a>
+                    <a href="?{% if query %}q={{ query|urlencode }}&amp;{% endif %}{% if selected_brand %}brand={{ selected_brand.pk }}&amp;{% endif %}page={{ page.next_page_number }}">Next</a>
                 {% endif %}
             </nav>
         {% endif %}
     {% else %}
         <div class="catalog-empty">
-            <h2>{% if query %}No matching parts found{% else %}The catalog is ready for products{% endif %}</h2>
-            <p>{% if query %}Try another product name or search term.{% else %}Products added to the store will appear here.{% endif %}</p>
-            {% if query %}<a href="{% url 'product_list' %}">Clear search</a>{% endif %}
+            <h2>{% if query or selected_brand %}No matching parts found{% else %}The catalog is ready for products{% endif %}</h2>
+            <p>{% if query %}Try another product name or search term.{% elif selected_brand %}No {{ selected_brand.name }} parts have been added yet.{% else %}Products added to the store will appear here.{% endif %}</p>
+            {% if query or selected_brand %}<a href="{% url 'product_list' %}">Clear filters</a>{% endif %}
         </div>
     {% endif %}
 </section>
