@@ -28,17 +28,17 @@
 
     <!-- ACCOUNT BANNER -->
     <div class="account-banner">
-        Already have an HP account? Select from the products you own.
-        <a href="#">Sign in</a>
+        Already have an Upsteps Account? Select from the products you own.
+        <a href="{% url 'login'%}">Sign in</a>
         /
-        <a href="#">Create an account</a>
+        <a href="{% url 'signup'%}">Create an account</a>
     </div>
 
 
     <!-- MAIN CONTENT -->
     <main class="main-content">
 
-        <h1>Welcome to HP Software and Drivers</h1>
+        <h1>Welcome to Upsteps Software and Drivers</h1>
 
         <h2>Select your product type below</h2>
 
@@ -47,7 +47,7 @@
         <section class="product-container">
 
             <!-- PRINTER -->
-            <a href="#" class="product-card">
+            <a href="{% url 'diagnose' %}" class="product-card">
 
                 <svg viewBox="0 0 48 48">
                     <rect x="13" y="5" width="22" height="10" rx="2"/>
@@ -58,13 +58,13 @@
                     <path d="M10 20h3"/>
                 </svg>
 
-                <span>Printer</span>
+                <span>SmartPhones</span>
 
             </a>
 
 
             <!-- LAPTOP -->
-            <a href="#" class="product-card">
+            <a href="{% url 'diagnose' %}" class="product-card">
 
                 <svg viewBox="0 0 48 48">
                     <rect x="8" y="10" width="32" height="25" rx="2"/>
@@ -77,7 +77,7 @@
 
 
             <!-- DESKTOP -->
-            <a href="#" class="product-card">
+            <a href="{% url 'diagnose' %}" class="product-card">
 
                 <svg viewBox="0 0 48 48">
                     <rect x="5" y="8" width="33" height="27" rx="2"/>
@@ -92,7 +92,7 @@
 
 
             <!-- POLY -->
-            <a href="#" class="product-card">
+            <a href="{% url 'diagnose' %}" class="product-card">
 
                 <svg viewBox="0 0 48 48">
                     <path d="M12 27v-9a12 12 0 0 1 24 0v9"/>
@@ -108,7 +108,7 @@
 
 
             <!-- OTHER -->
-            <a href="#" class="product-card">
+            <a href="{% url 'diagnose' %}" class="product-card">
 
                 <svg viewBox="0 0 48 48">
                     <rect x="5" y="8" width="34" height="24" rx="3"/>

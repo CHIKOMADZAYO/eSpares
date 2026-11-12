@@ -96,3 +96,7 @@ def update_product(request, product_id):
 
 def drivers(request):
     return render(request, 'drivers.html')
+
+
+def diagnose(request):
+    return render(request, 'diagnose.html')

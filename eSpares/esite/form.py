@@ -1,22 +1,40 @@
 from django import forms
+from .models import User
 
 
-class UserLoginForm(forms.Form):
-    username = forms.CharField()
-    password = forms.CharField(widget=forms.PasswordInput)
+
+class UserLoginForm(forms.ModelForm):
+
+    class Meta:
+        model=User
+        fields=(
+            "username",
+            "password"
+        )
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+            
+        }
 
 
-class UserRegistrationForm(forms.Form):
-    username = forms.CharField()
-    email = forms.EmailField()
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
-    password2 = forms.CharField(label='Confirm Password', widget=forms.PasswordInput)
+    def __init__(self,*args, **kwargs):
+        super(UserLoginForm,self).__init__(*args,**kwargs)
 
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password1'] != cd['password2']:
-            raise forms.ValidationError('Passwords don\'t match.')
-        return cd['password2']
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class']='form-control'
+
+
+
+class UserRegistrationForm(forms.ModelForm):
+    model=User
+    fields="__all__"
+
+    def __init__(self,*args, **kwargs):
+        super(UserRegistrationForm,self).__init__(*args,**kwargs)
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class']='form-control'
+
 
 
 

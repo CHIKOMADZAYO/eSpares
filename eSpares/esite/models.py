@@ -8,8 +8,8 @@ class User(models.Model):
     password = models.CharField(max_length=100)
 
 
-    class Meta:
-        db_table = 'user'
+    def __repr__(self):
+        return f"{self.username}"
 
 
 
@@ -19,8 +19,8 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     image = models.ImageField(upload_to='products/')
 
-    class Meta:
-        db_table = 'product'
+    def __repr__(self):
+        return f"{self.name}"
 
 
 
@@ -31,8 +31,8 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     order_date = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        db_table = 'order'
+    def __repr__(self):
+        return f"{self.product}"
 
 
 
@@ -41,8 +41,8 @@ class Cart(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
 
-    class Meta:
-        db_table = 'cart'
+    def __repr__(self):
+        return f"{self.quantity}"
 
 
 
@@ -53,5 +53,5 @@ class   Review(models.Model):
     comment = models.TextField()
     review_date = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        db_table = 'review'
+    def __repr__(self):
+        return f"{self.rating}"

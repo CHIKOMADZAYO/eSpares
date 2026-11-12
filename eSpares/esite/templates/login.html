@@ -1,11 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class=" w-50 m-auto p-4 bg-light ">
+    <h1 class="text-center m-4 bg-info"> Welcome Back </h1>
+    <form method="post" enctype="multipart/form-data">
+        {{form.as_p}}
+        <button type="submit" class="btn btn-primary">Login</button>
+        {% csrf_token %}
+    </form>
+</div>
+{% endblock %}
