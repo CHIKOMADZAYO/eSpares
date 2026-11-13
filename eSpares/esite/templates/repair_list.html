@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Repair History | Upsteps{% endblock %}
+{% block content %}
+<section class="account-page">
+    <header class="page-heading">
+        <p class="catalog-eyebrow">Customer account</p>
+        <h1>Repair history</h1>
+        <p>Review current and previous repair requests.</p><a class="form-primary-link"
+            href="{% url 'repair_booking' %}">Book a repair</a>
+    </header>
+    {% if repairs %}<div class="repair-history-list">{% for repair in repairs %}<article class="repair-history-card">
+            <div>
+                <p class="catalog-eyebrow">{{ repair.reference }}</p>
+                <h2>{{ repair.device.brand }} {{ repair.device.model_name }}</h2>
+                <p>{{ repair.service.name }} · Requested {{ repair.created_at|date:"j M Y" }}</p>
+            </div>
+            <div class="repair-history-status"><strong>{{ repair.get_status_display }}</strong><a
+                    href="{% url 'repair_detail' repair.reference %}">View updates</a></div>
+        </article>{% endfor %}</div>{% else %}<div class="catalog-empty">
+        <h2>No repair history yet</h2>
+        <p>Submit a request when your phone needs attention.</p><a href="{% url 'repair_booking' %}">Book a repair</a>
+    </div>{% endif %}
+</section>
+{% endblock %}

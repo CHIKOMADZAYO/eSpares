@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Invoice {{ invoice.invoice_number }} | Upsteps{% endblock %}
+{% block content %}
+<article class="invoice-page">
+    <div class="invoice-toolbar"><a href="{% url 'repair_detail' invoice.quote.repair.reference %}">Back to
+            repair</a><button type="button" onclick="window.print()">Print invoice</button></div>
+    <header>
+        <div>
+            <p class="catalog-eyebrow">Upsteps repair service</p>
+            <h1>Invoice</h1>
+        </div>
+        <div class="invoice-number"><strong>{{ invoice.invoice_number }}</strong><span>{{ invoice.issued_at|date:"j F Y"
+                }}</span></div>
+    </header>
+    <section class="invoice-customer">
+        <h2>Invoice for</h2>
+        <p>{{ invoice.quote.repair.customer.get_full_name|default:invoice.quote.repair.customer.username }}</p>
+        <p>{{ invoice.quote.repair.customer.email }}</p>
+    </section>
+    <section class="invoice-job">
+        <h2>Repair details</h2>
+        <p><strong>Reference:</strong> {{ invoice.quote.repair.reference }}</p>
+        <p><strong>Device:</strong> {{ invoice.quote.repair.device.brand }} {{ invoice.quote.repair.device.model_name }}
+        </p>
+        <p><strong>Service:</strong> {{ invoice.quote.repair.service.name }}</p>
+    </section>
+    <table class="invoice-table">
+        <thead>
+            <tr>
+                <th>Description</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ invoice.quote.parts_and_labor|linebreaksbr }}</td>
+                <td>{{ invoice.quote.amount }}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th>{{ invoice.quote.amount }}</th>
+            </tr>
+        </tfoot>
+    </table>
+    <p class="invoice-payment-state">Payment status: <strong>{{ invoice.get_status_display }}</strong></p>
+    <p class="invoice-note">This invoice was generated from the approved repair quotation. Online payment is not
+        currently available.</p>
+</article>
+{% endblock %}

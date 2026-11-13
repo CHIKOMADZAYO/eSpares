@@ -1,12 +1,111 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diagnose</title>
-</head>
-<body>
-    <p>Welcome to Our Virtual Diagnostic Center</p>
-    
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="diagnostics-page" aria-labelledby="diagnostics-title">
+    <header class="diagnostics-heading">
+        <p class="catalog-eyebrow">Upsteps support</p>
+        <h1 id="diagnostics-title">Device diagnostics</h1>
+        <p>Run a quick browser-based scan, then choose a guided check if you need more help.</p>
+    </header>
+
+    <section class="device-scan" aria-labelledby="device-scan-title">
+        <div class="device-scan-copy">
+            <h2 id="device-scan-title">Quick device scan</h2>
+            <p>Enter the model number or serial number of the device you need help with.</p>
+            <label class="device-reference-label" for="device-reference">Device model or serial number</label>
+            <input class="device-reference-input" id="device-reference" type="text" maxlength="100" autocomplete="off"
+                autocapitalize="characters" spellcheck="false" required>
+            <p class="device-scan-privacy" id="device-reference-help">This identifier stays in this page and is not sent
+                or saved. It is used only to label the scan results.</p>
+            <p class="device-scan-privacy">The scan checks basic browser details. It cannot inspect files, installed
+                apps, or hardware.</p>
+        </div>
+        <button class="device-scan-button" id="start-device-scan" type="button" disabled>Start device scan</button>
+    </section>
+    <p class="device-scan-status" id="device-scan-status" role="status" aria-live="polite"></p>
+    <section class="device-scan-results" id="device-scan-results" aria-labelledby="scan-results-title" hidden>
+        <h2 id="scan-results-title">Scan results</h2>
+        <dl id="device-scan-details"></dl>
+        <p class="device-scan-limit">These are browser-reported details, not a hardware health test. A full hardware
+            scan requires a trusted diagnostic tool made for your device.</p>
+    </section>
+
+    <aside class="diagnostics-safety" role="note">
+        <strong>Safety first</strong>
+        <p>This guide does not scan or repair your device. Stop if you notice a swollen battery, liquid, sparks, exposed
+            wires, unusual heat, or a burning smell. Disconnect power only if it is safe, and contact a qualified repair
+            service. Do not open the device.</p>
+    </aside>
+
+    <details class="diagnostics-manual" {% if selected_device %}open{% endif %}>
+        <summary>Manual troubleshooting</summary>
+        <div class="diagnostics-manual-content">
+            {% if selected_device %}
+            <nav class="diagnostics-breadcrumb" aria-label="Diagnostic steps">
+                <a href="{% url 'diagnose' %}">Choose a device</a>
+                <span aria-hidden="true">›</span>
+                {% if selected_issue %}
+                <a href="?device={{ selected_device.id }}">{{ selected_device.name }}</a>
+                <span aria-hidden="true">›</span>
+                <span>{{ selected_issue.title }}</span>
+                {% else %}
+                <span>{{ selected_device.name }}</span>
+                {% endif %}
+            </nav>
+            {% endif %}
+
+            {% if not selected_device %}
+            <h2 class="diagnostics-section-title">Select your device</h2>
+            <div class="diagnostics-device-grid">
+                {% for device in diagnostic_devices %}
+                <a class="diagnostics-device-card" href="?device={{ device.id }}">
+                    <span class="diagnostics-device-icon" aria-hidden="true">
+                        {% if device.id == 'phone' %}▯{% elif device.id == 'laptop' %}▱{% else %}▣{% endif %}
+                    </span>
+                    <span class="diagnostics-device-name">{{ device.name }}</span>
+                    <span class="diagnostics-device-description">{{ device.description }}</span>
+                    <span class="diagnostics-card-action">Choose device →</span>
+                </a>
+                {% endfor %}
+            </div>
+            {% elif not selected_issue %}
+            <h2 class="diagnostics-section-title">What’s happening with your {{ selected_device.name|lower }}?</h2>
+            <div class="diagnostics-issue-list">
+                {% for issue in selected_device.issues %}
+                <a class="diagnostics-issue-card" href="?device={{ selected_device.id }}&amp;issue={{ issue.id }}">
+                    <span>{{ issue.title }}</span>
+                    <span aria-hidden="true">→</span>
+                </a>
+                {% endfor %}
+            </div>
+            {% else %}
+            <article class="diagnostics-guide">
+                <h2>{{ selected_issue.title }}</h2>
+                <p>Try these checks in order. Stop if anything seems unsafe.</p>
+                <ol>
+                    {% for step in selected_issue.steps %}<li>{{ step }}</li>{% endfor %}
+                </ol>
+                <div class="diagnostics-next-steps">
+                    {% if selected_issue.parts_query %}
+                    <a class="diagnostics-primary-link"
+                        href="{% url 'product_list' %}?q={{ selected_issue.parts_query|urlencode }}">Search related
+                        parts</a>
+                    {% endif %}
+                    {% if selected_issue.drivers %}
+                    <a class="diagnostics-primary-link" href="{% url 'drivers' %}">Visit software and drivers</a>
+                    {% endif %}
+                    <a class="diagnostics-secondary-link" href="?device={{ selected_device.id }}">Try another check</a>
+                </div>
+                <p class="diagnostics-disclaimer">A search result does not confirm that a part fits your device. Check
+                    your exact model and compatibility before ordering.</p>
+            </article>
+            {% endif %}
+        </div>
+    </details>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'native_js/diagnostics.js' %}"></script>
+{% endblock %}

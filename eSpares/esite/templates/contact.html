@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Contact Support | Upsteps{% endblock %}
+{% block content %}
+<section class="account-page">
+    <header class="page-heading">
+        <p class="catalog-eyebrow">Customer support</p>
+        <h1>How can we help?</h1>
+        <p>Send the team a repair, warranty, complaint or feedback message. Include a repair reference when you have
+            one.</p>
+    </header>
+    <div class="contact-page-grid">
+        <section class="account-panel">
+            <h2>Contact the support team</h2>
+            <p>Prefer a message thread? <a href="{% url 'support_chat' %}">Open support chat</a> (sign-in required).</p>
+            <form class="service-form" method="post">{% csrf_token %}{% for field in form %}<div class="field-row">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in
+                    field.errors %}<small class="field-error">{{ error }}</small>{% endfor %}
+                </div>{% endfor %}<button class="form-primary-button" type="submit">Send message</button></form>
+        </section>
+        <section class="account-panel support-faq">
+            <h2>Frequently asked questions</h2>
+            <details>
+                <summary>When will my preferred repair date be confirmed?</summary>
+                <p>The date is a request. The team will review availability and update your repair record.</p>
+            </details>
+            <details>
+                <summary>When will I know the repair cost?</summary>
+                <p>A technician adds a quotation after reviewing the repair. You can approve or reject it from your
+                    account.</p>
+            </details>
+            <details>
+                <summary>Can I book a collection?</summary>
+                <p>You can request collection in the form. The team must confirm the address and availability before
+                    collection is arranged.</p>
+            </details>
+            <details>
+                <summary>How do I follow progress?</summary>
+                <p>Sign in and open your repair history, or use the high-entropy reference from your booking
+                    confirmation.</p>
+            </details>
+            <details>
+                <summary>How do payments work?</summary>
+                <p>Online payments are not enabled yet. Contact support for the current payment process; no card details
+                    should be sent through this form.</p>
+            </details>
+        </section>
+    </div>
+</section>
+{% endblock %}

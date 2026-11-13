@@ -6,9 +6,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>E-Spares Website</title>
+    <title>{% block title %}UpSteps Website{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'native_css/styles.css' %}?v=2">
+    <link rel="stylesheet" href="{% static 'native_css/styles.css' %}?v=15">
 </head>
 
 <body class="{% block body_class %}{% endblock %}">
@@ -20,8 +20,8 @@
 
         <div class="top-links">
             <a href="{% url 'product_list' %}">Shop parts</a>
-            <a href="#">Subscriptions</a>
-            <a href="{% url 'diagnose' %}">Support</a>
+            <a href="{% url 'cart' %}">Your cart</a>
+            <a href="{% url 'repair_booking' %}">Book a repair</a>
             <a href="{% url 'product_list' %}" class="business-btn">Browse parts</a>
         </div>
 
@@ -29,23 +29,25 @@
 
             <!-- Search -->
             <a href="{% url 'product_list' %}" aria-label="Search products"><svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="10.5" cy="10.5" r="7.5" />
-                <path d="M16 16 L22 22" />
-            </svg></a>
+                    <circle cx="10.5" cy="10.5" r="7.5" />
+                    <path d="M16 16 L22 22" />
+                </svg></a>
 
             <!-- Shopping Cart -->
-            <svg viewBox="0 0 24 24">
-                <path d="M2 3h2l3 13h12l3-9H5" />
-                <circle cx="9" cy="20" r="1" />
-                <circle cx="18" cy="20" r="1" />
-            </svg>
+            <a href="{% url 'cart' %}" aria-label="Shopping cart, {{ cart_count }} items"><svg viewBox="0 0 24 24">
+                    <path d="M2 3h2l3 13h12l3-9H5" />
+                    <circle cx="9" cy="20" r="1" />
+                    <circle cx="18" cy="20" r="1" />
+                </svg><span class="cart-count">{{ cart_count }}</span></a>
 
             <!-- Account -->
-            <svg viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10" />
-                <circle cx="12" cy="9" r="3" />
-                <path d="M6.5 19c1-3 3-4.5 5.5-4.5s4.5 1.5 5.5 4.5" />
-            </svg>
+            <a href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'login' %}{% endif %}"
+                aria-label="{% if user.is_authenticated %}My account{% else %}Sign in{% endif %}"><svg
+                    viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="9" r="3" />
+                    <path d="M6.5 19c1-3 3-4.5 5.5-4.5s4.5 1.5 5.5 4.5" />
+                </svg></a>
 
         </div>
     </nav>
@@ -64,7 +66,7 @@
             <div class="nav-dropdown-menu">
                 <a href="{% url 'product_list' %}">Browse all parts</a>
                 {% for brand in product_brands %}
-                    <a href="{% url 'product_list' %}?brand={{ brand.pk }}">{{ brand.name }}</a>
+                <a href="{% url 'product_list' %}?brand={{ brand.pk }}">{{ brand.name }}</a>
                 {% endfor %}
             </div>
         </details>
@@ -77,14 +79,13 @@
                 <span class="dropdown" aria-hidden="true"></span>
             </summary>
             <div class="nav-dropdown-menu">
-                <a href="#">Phone Diagnostic Tool</a>
-                <a href="#">Computer Diagnostic Tool</a>
-                <a href="#">Windows Support</a>
-                <a href="#">PC Hardware Diagnostics</a>
+                <a href="{% url 'repair_booking' %}">Book a phone repair</a>
+                <a href="{% url 'repair_tracking' %}">Track a repair</a>
+                <a href="{% url 'diagnose' %}">Device diagnostics</a>
             </div>
         </details>
 
-        <a href="#">Contact Us</a>
+        <a href="{% url 'contact' %}">Contact support</a>
 
         <details class="nav-dropdown">
             <summary>
@@ -92,23 +93,29 @@
                 <span class="dropdown" aria-hidden="true"></span>
             </summary>
             <div class="nav-dropdown-menu">
-                <a href="#">Create New Case</a>
-                <a href="#">Find existing Case</a>
-                <a href="#">Manage Warranties</a>
-                <a href="#">Register Account</a>
-                <a href="#">MySupport Help</a>
+                <a href="{% url 'repair_booking' %}">Book a repair</a>
+                <a href="{% url 'product_list' %}">Find a part</a>
+                <a href="{% url 'signup' %}">Create an account</a>
             </div>
         </details>
 
-       <details class="nav-dropdown">
+        <details class="nav-dropdown">
             <summary>
                 My Upsteps Account
                 <span class="dropdown" aria-hidden="true"></span>
             </summary>
             <div class="nav-dropdown-menu">
-                <a href="#">Support Dashboard</a>
-                <a href="#">Upsteps Benefits</a>
-                
+                {% if user.is_authenticated %}
+                <a href="{% url 'profile' %}">My profile</a>
+                <a href="{% url 'device_list' %}">My devices</a>
+                <a href="{% url 'repair_list' %}">My repairs</a>
+                <a href="{% url 'support_chat' %}">Support chat</a>
+                {% endif %}
+                <a href="{% url 'cart' %}">Your parts cart ({{ cart_count }})</a>
+                {% if user.is_authenticated %}<form action="{% url 'logout' %}" method="post">{% csrf_token %}<button
+                        class="nav-menu-button" type="submit">Sign out</button></form>{% else %}<a
+                    href="{% url 'login' %}">Sign in</a>{% endif %}
+
             </div>
         </details>
 
@@ -117,19 +124,78 @@
 
     <!-- Main Content -->
     <main class="container mt-4">
+        {% if messages %}
+        <div class="site-messages" aria-live="polite">
+            {% for message in messages %}<p class="site-message site-message-{{ message.tags }}">{{ message }}</p>{%
+            endfor %}
+        </div>
+        {% endif %}
         {% block content %}
         {% endblock %}
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-light text-center py-3 mt-5">
-        <div class="container">
-            <p>&copy; 2023 E-Spares. All rights reserved.</p>
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <div class="footer-columns">
+                <section class="footer-column" aria-labelledby="footer-shop-title">
+                    <h2 id="footer-shop-title">Shop</h2>
+                    <a href="{% url 'product_list' %}">All spare parts</a>
+                    <a href="{% url 'home' %}#brands-title">Shop by brand</a>
+                </section>
+
+                <section class="footer-column" aria-labelledby="footer-products-title">
+                    <h2 id="footer-products-title">Products</h2>
+                    {% for brand in product_brands %}
+                    <a href="{% url 'product_list' %}?brand={{ brand.pk }}">{{ brand.name }}</a>
+                    {% empty %}
+                    <a href="{% url 'product_list' %}">Browse the catalog</a>
+                    {% endfor %}
+                </section>
+
+                <section class="footer-column" aria-labelledby="footer-support-title">
+                    <h2 id="footer-support-title">Support</h2>
+                    <a href="{% url 'repair_booking' %}">Book a repair</a>
+                    <a href="{% url 'repair_tracking' %}">Track a repair</a>
+                    <a href="{% url 'support_chat' %}">Support chat</a>
+                    <a href="{% url 'contact' %}">Contact support</a>
+                    <a href="{% url 'drivers' %}">Software and drivers</a>
+                    <a href="{% url 'home' %}">Support home</a>
+                </section>
+
+                <section class="footer-column" aria-labelledby="footer-account-title">
+                    <h2 id="footer-account-title">Account</h2>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}">My profile</a>
+                    <a href="{% url 'repair_list' %}">Repair history</a>
+                    <a href="{% url 'support_chat' %}">Support chat</a>
+                    {% else %}
+                    <a href="{% url 'login' %}">Sign in</a>
+                    <a href="{% url 'signup' %}">Create an account</a>
+                    {% endif %}
+                </section>
+
+                <section class="footer-column" aria-labelledby="footer-sustainability-title">
+                    <h2 id="footer-sustainability-title">Sustainability</h2>
+                    <p>Repair and reuse devices where possible.</p>
+                    <a href="{% url 'diagnose' %}">Explore repair guidance</a>
+                </section>
+
+                <section class="footer-column" aria-labelledby="footer-about-title">
+                    <h2 id="footer-about-title">About</h2>
+                    <p>Upsteps spare parts and device support.</p>
+                    <a href="{% url 'home' %}">Upsteps home</a>
+                </section>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; {% now "Y" %} Upsteps</span>
+                <a href="{% url 'home' %}">Back to top</a>
+            </div>
         </div>
     </footer>
 
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'native_js/main.js' %}"></script>
+    {% block extra_scripts %}{% endblock %}
 </body>
 
 </html>

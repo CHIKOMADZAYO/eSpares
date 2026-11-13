@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Support Chat | Upsteps{% endblock %}
+{% block content %}
+<section class="account-page chat-page">
+    <header class="page-heading">
+        <p class="catalog-eyebrow">Customer support</p>
+        <h1>Chat with support</h1>
+        <p>Start a message thread with the support team. Replies appear here while you are signed in.</p>
+    </header>
+    <div class="chat-layout">
+        <section class="account-panel">
+            <h2>Start a conversation</h2>
+            <form class="service-form" method="post">{% csrf_token %}<div class="field-row"><label
+                        for="chat-subject">Subject</label><input id="chat-subject" name="subject" type="text"
+                        maxlength="120" placeholder="e.g. Help with repair reference"></div>
+                <div class="field-row"><label for="{{ form.body.id_for_label }}">{{ form.body.label }}</label>{{
+                    form.body }}{% for error in form.body.errors %}<small class="field-error">{{ error }}</small>{%
+                    endfor %}</div><button class="form-primary-button" type="submit">Start chat</button>
+            </form>
+        </section>
+        <section class="account-panel">
+            <h2>Your conversations</h2>{% for conversation in conversations %}<a class="chat-conversation-link"
+                href="{% url 'support_chat_thread' conversation.pk %}"><span><strong>{{ conversation.subject
+                        }}</strong><small>{{ conversation.updated_at|date:"j M Y, H:i" }}</small></span><span
+                    class="chat-state chat-state-{{ conversation.status }}">{{ conversation.get_status_display
+                    }}</span></a>{% empty %}<p>You have no support chats yet.</p>{% endfor %}
+        </section>
+    </div>
+</section>
+{% endblock %}

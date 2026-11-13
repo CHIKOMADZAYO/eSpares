@@ -5,6 +5,7 @@
     <h1 class="mb-4">Create your account</h1>
     <form method="post" novalidate>
         {% csrf_token %}
+        {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
         {% if form.non_field_errors %}
             <div class="alert alert-danger">{{ form.non_field_errors }}</div>
         {% endif %}

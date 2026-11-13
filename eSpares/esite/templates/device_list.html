@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}My Devices | Upsteps{% endblock %}
+{% block content %}
+<section class="account-page">
+    <header class="page-heading">
+        <p class="catalog-eyebrow">Customer account</p>
+        <h1>My devices</h1>
+        <p>Saved phones are available when you book a repair.</p><a class="form-primary-link"
+            href="{% url 'device_add' %}">Register a phone</a>
+    </header>
+    {% if devices %}<div class="saved-device-grid">{% for device in devices %}<article class="saved-device-card">{% if
+            device.photo %}<img src="{% url 'device_photo' device.pk %}"
+                alt="Photo of {{ device.brand }} {{ device.model_name }}">{% else %}<div
+                class="saved-device-placeholder" aria-hidden="true">{{ device.brand.name|slice:":1" }}</div>{% endif %}
+            <div>
+                <p class="catalog-eyebrow">{{ device.brand }}</p>
+                <h2>{{ device.model_name }}</h2>
+                <p>{{ device.get_condition_display }}</p>{% if device.notes %}<p>{{ device.notes|truncatechars:120 }}
+                </p>{% endif %}<a href="{% url 'repair_booking' %}">Book repair for this phone</a>
+            </div>
+        </article>{% endfor %}</div>{% else %}<div class="catalog-empty">
+        <h2>No saved devices</h2>
+        <p>Add the phone details so it is ready for a repair booking.</p><a href="{% url 'device_add' %}">Register a
+            device</a>
+    </div>{% endif %}
+</section>
+{% endblock %}

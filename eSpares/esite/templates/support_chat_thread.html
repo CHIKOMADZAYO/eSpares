@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ conversation.subject }} | Upsteps Support{% endblock %}
+{% block content %}
+<section class="chat-thread-page" data-messages-url="{% url 'support_chat_messages' conversation.pk %}"
+    data-status="{{ conversation.status }}">
+    <nav class="product-breadcrumb" aria-label="Breadcrumb"><a href="{% url 'support_chat' %}">Support chats</a><span
+            aria-hidden="true">/</span><span>{{ conversation.subject }}</span></nav>
+    <header class="chat-thread-heading">
+        <div>
+            <p class="catalog-eyebrow">Support conversation</p>
+            <h1>{{ conversation.subject }}</h1>
+        </div><span class="chat-state chat-state-{{ conversation.status }}">{{ conversation.get_status_display }}</span>
+    </header>
+    <div class="chat-thread-messages" id="chat-thread-messages" aria-live="polite" aria-relevant="additions text">
+        {% for item in chat_messages %}<article class="chat-message{% if item.is_staff %} chat-message-staff{% endif %}"
+            data-message-id="{{ item.pk }}"><strong>{% if item.is_staff %}Support team{% else %}You{% endif %}</strong>
+            <p>{{ item.body|linebreaksbr }}</p><time datetime="{{ item.sent_at|date:'c' }}">{{ item.sent_at|date:"j M Y,
+                H:i" }}</time>
+        </article>{% endfor %}
+    </div>
+    <p class="chat-poll-status" id="chat-poll-status">New replies refresh automatically while this page is open.</p>
+    {% if conversation.status == 'open' %}<form class="chat-reply-form" method="post">{% csrf_token %}<div
+            class="field-row"><label for="{{ form.body.id_for_label }}">Reply</label>{{ form.body }}</div><button
+            class="form-primary-button" type="submit">Send message</button></form>{% else %}<p class="privacy-note">This
+        conversation is closed. <a href="{% url 'support_chat' %}">Start a new conversation</a>.</p>{% endif %}
+</section>
+{% endblock %}
+{% block extra_scripts %}
+<script src="{% static 'native_js/support-chat.js' %}" defer></script>{% endblock %}

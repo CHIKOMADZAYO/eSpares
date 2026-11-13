@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Repair {{ repair.reference }} | Upsteps{% endblock %}
+{% block content %}
+<section class="account-page">
+    <nav class="product-breadcrumb" aria-label="Breadcrumb"><a href="{% url 'repair_list' %}">Repair history</a><span
+            aria-hidden="true">/</span><span>{{ repair.reference }}</span></nav>
+    <header class="repair-detail-heading">
+        <div>
+            <p class="catalog-eyebrow">Repair reference {{ repair.reference }}</p>
+            <h1>{{ repair.device.brand }} {{ repair.device.model_name }}</h1>
+            <p>{{ repair.service.name }} · Requested {{ repair.created_at|date:"j M Y" }}</p>
+        </div><span class="repair-status-badge">{{ repair.get_status_display }}</span>
+    </header>
+    <div class="repair-detail-grid">
+        <section class="account-panel">
+            <h2>Repair progress</h2>
+            <ol class="repair-timeline">{% for update in repair.updates.all %}{% if update.visible_to_customer %}<li>
+                    <time datetime="{{ update.created_at|date:'c' }}">{{ update.created_at|date:"j M Y, H:i" }}</time>{%
+                    if update.status %}<strong>{{ update.get_status_display }}</strong>{% endif %}<p>{{ update.comment
+                        }}</p>
+                </li>{% endif %}{% empty %}<li>Request received.</li>{% endfor %}</ol>{% if repair.estimated_completion
+            %}<p><strong>Estimated completion:</strong> {{ repair.estimated_completion|date:"j F Y" }}</p>{% endif %}
+        </section>
+        <section class="account-panel">
+            <h2>Request details</h2>
+            <p><strong>Device condition:</strong> {{ repair.device.get_condition_display }}</p>
+            <p><strong>Preferred appointment:</strong> {{ repair.preferred_date|date:"j F Y" }}</p>
+            <p><strong>Service option:</strong> {{ repair.get_fulfillment_display }}</p>
+            <h3>Problem description</h3>
+            <p>{{ repair.problem|linebreaksbr }}</p>{% if repair.photos.all %}<div class="repair-photo-grid">{% for
+                photo in repair.photos.all %}<a href="{% url 'repair_photo' repair.reference photo.pk %}"
+                    target="_blank" rel="noopener"><img src="{% url 'repair_photo' repair.reference photo.pk %}"
+                        alt="Photo attached to repair request" loading="lazy"></a>{% endfor %}</div>{% endif %}
+        </section>
+    </div>
+    {% for quote in quotes %}<section class="account-panel quote-panel">
+        <div class="panel-heading">
+            <h2>Quotation</h2><span>{{ quote.get_status_display }}</span>
+        </div>
+        <p class="quote-amount">{{ quote.amount }}</p>
+        <p>{{ quote.parts_and_labor|linebreaksbr }}</p>{% if quote.status == 'pending' %}<form class="quote-actions"
+            method="post">{% csrf_token %}<input type="hidden" name="quote_id" value="{{ quote.pk }}"><button
+                class="form-primary-button" name="decision" value="approved" type="submit">Approve
+                quotation</button><button class="quote-reject-button" name="decision" value="rejected"
+                type="submit">Reject quotation</button></form>{% endif %}{% if quote.invoice %}<div
+            class="invoice-summary">
+            <h3>Invoice {{ quote.invoice.invoice_number }}</h3>
+            <p>Status: {{ quote.invoice.get_status_display }}</p>
+            <h4>Payment history</h4>{% for payment in quote.invoice.payments.all %}<p>{{ payment.amount }} · {{
+                payment.recorded_at|date:"j M Y" }}{% if payment.reference %} · Ref {{ payment.reference }}{% endif %}
+            </p>{% empty %}<p>No payments recorded.</p>{% endfor %}<a
+                href="{% url 'repair_invoice' repair.reference quote.invoice.invoice_number %}">View printable
+                invoice</a>
+        </div>{% endif %}
+    </section>{% endfor %}
+</section>
+{% endblock %}

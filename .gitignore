@@ -1,0 +1,5 @@
+/venv/
+/eSpares/private_uploads/
+/eSpares/media/
+__pycache__/
+*.py[cod]

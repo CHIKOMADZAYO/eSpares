@@ -9,15 +9,21 @@
 <article class="product-detail">
     <div class="product-detail-image">
         {% if product.image %}
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
         {% else %}
-            <span aria-hidden="true" class="catalog-image-placeholder">E-Spares</span>
+        <span aria-hidden="true" class="catalog-image-placeholder">E-Spares</span>
         {% endif %}
     </div>
     <div class="product-detail-info">
         <p class="catalog-eyebrow">{% if product.brand %}{{ product.brand.name }}{% else %}Spare part{% endif %}</p>
         <h1>{{ product.name }}</h1>
         <p class="product-detail-price">{{ product.price }}</p>
+        <form class="product-add-form" action="{% url 'add_to_cart' product.pk %}" method="post">
+            {% csrf_token %}
+            <label for="product-quantity">Quantity</label>
+            <input id="product-quantity" name="quantity" type="number" min="1" max="99" value="1" required>
+            <button type="submit">Add to cart</button>
+        </form>
         <h2>Description</h2>
         <p class="product-description">{{ product.description|linebreaksbr }}</p>
         <a class="product-back-link" href="{% url 'product_list' %}">← Back to parts</a>

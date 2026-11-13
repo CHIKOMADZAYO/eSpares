@@ -1,11 +1,169 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Phone Repairs and Spare Parts | Upsteps{% endblock %}
+
+{% block content %}
+<div class="repair-home">
+    <section class="repair-home-hero" aria-labelledby="landing-title">
+        <div class="repair-home-hero-copy">
+            <p class="landing-eyebrow">Phone repair service</p>
+            <h1 id="landing-title">Get your phone back to working order.</h1>
+            <p>Tell us what is wrong, choose a preferred date and request a repair. A technician reviews the device
+                before providing a quotation.</p>
+            <div class="repair-home-actions">
+                <a class="store-primary-button" href="{% url 'repair_booking' %}">Book a repair</a>
+                <a class="repair-home-secondary" href="{% url 'repair_tracking' %}">Track a repair</a>
+            </div>
+            <p class="repair-home-note">No repair starts until you have reviewed the quotation.</p>
+        </div>
+        <div class="repair-home-hero-image">
+            <img src="{% static 'img/pexels-fotografia-lui-vlad-1445510816-31945005.jpg' %}"
+                alt="Electronic components on a repair workbench" fetchpriority="high">
+        </div>
+    </section>
+
+    <section class="repair-home-section" aria-labelledby="repair-services-title">
+        <div class="repair-section-heading">
+            <div>
+                <p class="landing-eyebrow">How can we help?</p>
+                <h2 id="repair-services-title">Repair services</h2>
+            </div>
+            <a href="{% url 'repair_booking' %}">Request a repair <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <div class="repair-service-grid">
+            {% for service in repair_services %}
+            <a class="repair-service-card" href="{% url 'repair_booking' %}">
+                <span class="repair-service-mark" aria-hidden="true">+</span>
+                <h3>{{ service.name }}</h3>
+                <p>{{ service.description }}</p>
+                <span class="repair-service-link">Book an assessment <span aria-hidden="true">&rarr;</span></span>
+            </a>
+            {% empty %}
+            <p>Repair services are being set up. Please <a href="{% url 'contact' %}">contact support</a>.</p>
+            {% endfor %}
+        </div>
+        <p class="repair-home-note">Service availability and price are confirmed by a technician after inspection.</p>
+    </section>
+
+    <section class="repair-brand-section repair-home-section" aria-labelledby="repair-brands-title">
+        <div class="repair-section-heading">
+            <div>
+                <p class="landing-eyebrow">Our supported brands</p>
+                <h2 id="repair-brands-title">Phones we can assess</h2>
+            </div>
+            <a href="{% url 'contact' %}">Ask about your model <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        {% if supported_phone_brands %}
+        <div class="brand-carousel" aria-label="Supported smartphone brands">
+            <button class="brand-carousel-control" id="brand-carousel-prev" type="button"
+                aria-label="Previous brands"><span aria-hidden="true">&#8249;</span></button>
+            <div class="brand-carousel-track" id="brand-carousel-track" role="region" aria-label="Supported brands"
+                tabindex="0">
+                {% for brand in supported_phone_brands %}
+                <div class="brand-carousel-card repair-brand-card"><span
+                        class="brand-wordmark brand-wordmark-{{ brand.name|slugify }}">{{ brand.name }}</span><span
+                        class="brand-carousel-caption">Repair assessment available</span></div>
+                {% endfor %}
+            </div>
+            <button class="brand-carousel-control" id="brand-carousel-next" type="button" aria-label="Next brands"><span
+                    aria-hidden="true">&#8250;</span></button>
+        </div>
+        {% else %}<p>Contact us to check support for your phone.</p>{% endif %}
+    </section>
+
+    {% if promotions %}
+    <section class="repair-promo-section repair-home-section" aria-labelledby="repair-promos-title">
+        <div class="repair-section-heading">
+            <div>
+                <p class="landing-eyebrow">Current offers</p>
+                <h2 id="repair-promos-title">Special offers</h2>
+            </div>
+        </div>
+        <div class="repair-promo-grid">{% for promotion in promotions %}<article class="repair-promo-card">
+                <h3>{{ promotion.title }}</h3>
+                <p>{{ promotion.description }}</p><a href="{% url 'repair_booking' %}">Make a request <span
+                        aria-hidden="true">&rarr;</span></a>
+            </article>{% endfor %}</div>
+    </section>
+    {% endif %}
+
+    <section class="repair-why-section repair-home-section" aria-labelledby="repair-why-title">
+        <div class="repair-section-heading">
+            <div>
+                <p class="landing-eyebrow">A clear process</p>
+                <h2 id="repair-why-title">Know what happens next</h2>
+            </div>
+        </div>
+        <div class="repair-why-grid">
+            <article><span>01</span>
+                <h3>Tell us about the device</h3>
+                <p>Save your phone and describe the fault. Serial number and IMEI are optional.</p>
+            </article>
+            <article><span>02</span>
+                <h3>Get a technician review</h3>
+                <p>We assess the request and add a quotation with parts and labour details.</p>
+            </article>
+            <article><span>03</span>
+                <h3>Approve before repair</h3>
+                <p>Review the cost and approve or reject the quote from your account.</p>
+            </article>
+            <article><span>04</span>
+                <h3>Follow repair progress</h3>
+                <p>Use your account or repair reference to check status and team updates.</p>
+            </article>
+        </div>
+    </section>
+
+    {% if testimonials %}
+    <section class="repair-testimonials repair-home-section" aria-labelledby="repair-testimonials-title">
+        <div class="repair-section-heading">
+            <div>
+                <p class="landing-eyebrow">Customer feedback</p>
+                <h2 id="repair-testimonials-title">What customers say</h2>
+            </div>
+        </div>
+        <div class="repair-testimonial-grid">{% for item in testimonials %}<figure>
+                <blockquote>“{{ item.quote }}”</blockquote>
+                <figcaption>{{ item.customer_name }}</figcaption>
+            </figure>{% endfor %}</div>
+    </section>
+    {% endif %}
+
+    <section class="repair-help-band" aria-labelledby="repair-help-title">
+        <div>
+            <p class="landing-eyebrow">Need help?</p>
+            <h2 id="repair-help-title">Talk to the support team</h2>
+            <p>Send a booking, warranty, complaint or service feedback message.</p>
+        </div>
+        <a class="store-primary-button" href="{% url 'contact' %}">Contact support</a>
+    </section>
+
+    <section class="repair-store-link">
+        <div>
+            <p class="landing-eyebrow">Looking for parts?</p>
+            <h2>Browse the spare-parts store</h2>
+        </div><a href="{% url 'product_list' %}">Shop spare parts <span aria-hidden="true">&rarr;</span></a>
+    </section>
+</div>
+
+<details class="landing-chat-widget">
+    <summary aria-label="Open support options" title="Open support options"><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5H6l-3 2v-5.2A7.5 7.5 0 1 1 20 11.5Z" />
+            <circle cx="8" cy="11.5" r=".8" />
+            <circle cx="12" cy="11.5" r=".8" />
+            <circle cx="16" cy="11.5" r=".8" />
+        </svg></summary>
+    <section class="landing-chat-panel" aria-label="Support options">
+        <h2>How can we help?</h2>
+        <p>Choose an option to continue.</p><a href="{% url 'support_chat' %}">Chat with support <span
+                aria-hidden="true">&rarr;</span></a><a href="{% url 'repair_booking' %}">Book a repair <span
+                aria-hidden="true">&rarr;</span></a><a href="{% url 'repair_tracking' %}">Track a repair <span
+                aria-hidden="true">&rarr;</span></a><a href="{% url 'contact' %}">Contact support <span
+                aria-hidden="true">&rarr;</span></a>
+    </section>
+</details>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'native_js/brand-carousel.js' %}"></script>{% endblock %}

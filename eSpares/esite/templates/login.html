@@ -29,7 +29,8 @@
 
     <form method="post" novalidate>
         {% csrf_token %}
-        <label for="{{ form.username.id_for_label }}">Email address</label>
+        {% if request.GET.next %}<input type="hidden" name="next" value="{{ request.GET.next }}">{% endif %}
+        <label for="{{ form.username.id_for_label }}">Username or email address</label>
         <input class="login-input" type="text" name="{{ form.username.html_name }}"
             id="{{ form.username.id_for_label }}" value="{{ form.username.value|default:'' }}"
             placeholder="name@example.com" autocomplete="username" autofocus required>
@@ -40,9 +41,10 @@
         {% if form.non_field_errors %}<p class="error-message">{{ form.non_field_errors|join:', ' }}</p>{% endif %}
         <button class="login-button" type="submit" disabled>Sign In</button>
     </form>
-    <a class="signup-link" href="{% url 'signup' %}">Sign up</a>
+    <a class="signup-link"
+        href="{% url 'signup' %}{% if request.GET.next %}?next={{ request.GET.next|urlencode }}{% endif %}">Sign up</a>
     <hr class="separator">
-    <a class="help-link" href="mailto:support@espares.example">
+    <a class="help-link" href="{% url 'diagnose' %}">
         Need help signing in?
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
             <path d="M9 2h5v5M14 2 7 9" />
