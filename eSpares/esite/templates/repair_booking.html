@@ -1,16 +1,27 @@
 {% extends 'base.html' %}
 {% block title %}Book a Repair | Upsteps{% endblock %}
+
 {% block content %}
 <section class="form-page">
     <p class="catalog-eyebrow">Repair service</p>
     <h1>Request a repair</h1>
-    <p>Choose a saved device and describe the issue. Your preferred date is a request; the team will confirm
-        availability and the exact service location.</p>
-    <form class="service-form" method="post" enctype="multipart/form-data">{% csrf_token %}{% for field in form %}<div
-            class="field-row"><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if
-            field.help_text %}<small>{{ field.help_text }}</small>{% endif %}{% for error in field.errors %}<small
-                class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}<p class="privacy-note">Photos are
-            optional, limited to 3 image files of up to 5 MB each. Do not include an IMEI in the problem description.
-        </p><button class="form-primary-button" type="submit">Submit repair request</button></form>
+    <p>Choose a saved device and describe the issue. Your preferred date is a request; the team will confirm availability and the exact service location.</p>
+    <form class="service-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="field-row">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                    <small>{{ field.help_text }}</small>
+                {% endif %}
+                {% for error in field.errors %}
+                    <small class="field-error">{{ error }}</small>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <p class="privacy-note">Photos are optional, limited to 3 image files of up to 5 MB each. Do not include an IMEI in the problem description.</p>
+        <button class="form-primary-button" type="submit">Submit repair request</button>
+    </form>
 </section>
 {% endblock %}

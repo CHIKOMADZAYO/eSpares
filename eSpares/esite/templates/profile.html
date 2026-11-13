@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}My Account | Upsteps{% endblock %}
+
 {% block content %}
 <section class="account-page">
     <header class="page-heading">
@@ -10,27 +11,52 @@
     <div class="account-grid">
         <section class="account-panel">
             <h2>Personal information</h2>
-            <form method="post">{% csrf_token %}{% for field in form %}<div class="field-row"><label
-                        for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% for error in field.errors
-                    %}<small class="field-error">{{ error }}</small>{% endfor %}</div>{% endfor %}<button
-                    class="form-primary-button" type="submit">Save profile</button></form>
+            <form method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="field-row">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}
+                            <small class="field-error">{{ error }}</small>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+                <button class="form-primary-button" type="submit">Save profile</button>
+            </form>
         </section>
         <section class="account-panel">
             <div class="panel-heading">
-                <h2>Saved devices</h2><a href="{% url 'device_add' %}">Add device</a>
-            </div>{% for device in devices %}<div class="account-list-row"><strong>{{ device.brand }} {{
-                    device.model_name }}</strong><span>{{ device.get_condition_display }}</span></div>{% empty %}<p>No
-                saved devices yet.</p>{% endfor %}<a class="plain-action-link" href="{% url 'device_list' %}">View all
-                devices</a>
+                <h2>Saved devices</h2>
+                <a href="{% url 'device_add' %}">Add device</a>
+            </div>
+            {% for device in devices %}
+                <div class="account-list-row">
+                    <strong>{{ device.brand }} {{ device.model_name }}</strong>
+                    <span>{{ device.get_condition_display }}</span>
+                </div>
+            {% empty %}
+                <p>No saved devices yet.</p>
+            {% endfor %}
+            <a class="plain-action-link" href="{% url 'device_list' %}">View all devices</a>
         </section>
         <section class="account-panel account-panel-wide">
             <div class="panel-heading">
-                <h2>Recent repairs</h2><a href="{% url 'repair_booking' %}">Book a repair</a>
-            </div>{% for repair in recent_repairs %}<div class="account-list-row"><span><strong>{{ repair.service.name
-                        }}</strong><small>{{ repair.reference }} · {{ repair.created_at|date:"j M Y" }}</small></span><a
-                    href="{% url 'repair_detail' repair.reference %}">{{ repair.get_status_display }}</a></div>{% empty
-            %}<p>No repair requests yet.</p>{% endfor %}<a class="plain-action-link" href="{% url 'repair_list' %}">Open
-                repair history</a>
+                <h2>Recent repairs</h2>
+                <a href="{% url 'repair_booking' %}">Book a repair</a>
+            </div>
+            {% for repair in recent_repairs %}
+                <div class="account-list-row">
+                    <span>
+                        <strong>{{ repair.service.name }}</strong>
+                        <small>{{ repair.reference }} · {{ repair.created_at|date:"j M Y" }}</small>
+                    </span>
+                    <a href="{% url 'repair_detail' repair.reference %}">{{ repair.get_status_display }}</a>
+                </div>
+            {% empty %}
+                <p>No repair requests yet.</p>
+            {% endfor %}
+            <a class="plain-action-link" href="{% url 'repair_list' %}">Open repair history</a>
         </section>
     </div>
 </section>

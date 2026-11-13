@@ -1,26 +1,49 @@
 {% extends 'base.html' %}
 {% block title %}Track a Repair | Upsteps{% endblock %}
+
 {% block content %}
 <section class="form-page tracking-page">
     <p class="catalog-eyebrow">Repair service</p>
     <h1>Track your repair</h1>
-    <p>Enter the reference from your booking confirmation. Keep it private: anyone with the reference can see the repair
-        status and public updates.</p>
+    <p>Enter the reference from your booking confirmation. Keep it private: anyone with the reference can see the repair status and public updates.</p>
     <form class="tracking-form" method="get">
-        <div class="field-row"><label for="{{ form.reference.id_for_label }}">{{ form.reference.label }}</label>{{
-            form.reference }}{% for error in form.reference.errors %}<small class="field-error">{{ error }}</small>{%
-            endfor %}</div><button class="form-primary-button" type="submit">Find repair</button>
+        <div class="field-row">
+            <label for="{{ form.reference.id_for_label }}">{{ form.reference.label }}</label>
+            {{ form.reference }}
+            {% for error in form.reference.errors %}
+                <small class="field-error">{{ error }}</small>
+            {% endfor %}
+        </div>
+        <button class="form-primary-button" type="submit">Find repair</button>
     </form>
-    {% if searched %}{% if repair %}<article class="tracking-result">
-        <p class="catalog-eyebrow">{{ repair.reference }}</p>
-        <h2>{{ repair.service.name }}</h2>
-        <p>Current status: <strong>{{ repair.get_status_display }}</strong></p>{% if repair.estimated_completion %}<p>
-            Estimated completion: {{ repair.estimated_completion|date:"j F Y" }}</p>{% endif %}<h3>Progress updates</h3>
-        <ol class="repair-timeline">{% for update in repair.updates.all %}{% if update.visible_to_customer %}<li><time
-                    datetime="{{ update.created_at|date:'c' }}">{{ update.created_at|date:"j M Y, H:i" }}</time>{% if
-                update.status %}<strong>{{ update.get_status_display }}</strong>{% endif %}<p>{{ update.comment }}</p>
-            </li>{% endif %}{% endfor %}</ol>
-    </article>{% else %}<p class="tracking-not-found">No repair was found for that reference. Check the code and try
-        again, or <a href="{% url 'contact' %}">contact support</a>.</p>{% endif %}{% endif %}
+
+    {% if searched %}
+        {% if repair %}
+            <article class="tracking-result">
+                <p class="catalog-eyebrow">{{ repair.reference }}</p>
+                <h2>{{ repair.service.name }}</h2>
+                <p>Current status: <strong>{{ repair.get_status_display }}</strong></p>
+                {% if repair.estimated_completion %}
+                    <p>Estimated completion: {{ repair.estimated_completion|date:"j F Y" }}</p>
+                {% endif %}
+                <h3>Progress updates</h3>
+                <ol class="repair-timeline">
+                    {% for update in repair.updates.all %}
+                        {% if update.visible_to_customer %}
+                            <li>
+                                <time datetime="{{ update.created_at|date:'c' }}">{{ update.created_at|date:"j M Y, H:i" }}</time>
+                                {% if update.status %}
+                                    <strong>{{ update.get_status_display }}</strong>
+                                {% endif %}
+                                <p>{{ update.comment }}</p>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ol>
+            </article>
+        {% else %}
+            <p class="tracking-not-found">No repair was found for that reference. Check the code and try again, or <a href="{% url 'contact' %}">contact support</a>.</p>
+        {% endif %}
+    {% endif %}
 </section>
 {% endblock %}
